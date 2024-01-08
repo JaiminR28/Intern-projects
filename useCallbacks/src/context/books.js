@@ -6,6 +6,8 @@ const BooksContext = createContext();
 function Provider({ children }) {
 	const [books, setBooks] = useState([]);
 
+	//! since we haven't kept the any second argument for the callback on again request / run / call by the useEffect will return the reference of the same callback function
+
 	const fetchBooks = useCallback(async () => {
 		const response = await axios.get("http://localhost:3001/books/");
 		setBooks(response.data);
