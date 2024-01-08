@@ -6,6 +6,8 @@ import { NavigationProvider } from "./contexts/navigationContext.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
 	<React.StrictMode>
-		<App />
+		<NavigationProvider>
+			<App />
+		</NavigationProvider>
 	</React.StrictMode>
 );
