@@ -1,8 +1,11 @@
 import { useContext } from "react";
 import NavigationContext from "../contexts/navigationContext";
 
+//* This component will maintain the information on which page is the user In
+
 function Link({ to, children }) {
-	const { currentPath, navigate } = useContext(NavigationContext);
+	const { navigate } = useContext(NavigationContext);
+
 	const handleClick = (event) => {
 		event.preventDefault();
 
