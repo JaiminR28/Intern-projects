@@ -9,12 +9,12 @@ function Provider({ children }) {
 	//! since we haven't kept the any second argument for the callback on again request / run / call by the useEffect will return the reference of the same callback function
 
 	const fetchBooks = useCallback(async () => {
-		const response = await axios.get("http://localhost:3001/books/");
+		const response = await axios.get("http://localhost:3005/books");
 		setBooks(response.data);
 	}, []);
 
 	const editBookById = async (id, newTitle) => {
-		const response = await axios.put(`http://localhost:3001/books/${id}`, {
+		const response = await axios.put(`http://localhost:3005/books/${id}`, {
 			title: newTitle,
 		});
 
@@ -30,7 +30,7 @@ function Provider({ children }) {
 	};
 
 	const deleteBookById = async (id) => {
-		await axios.delete(`http://localhost:3001/books/${id}`);
+		await axios.delete(`http://localhost:3005/books/${id}`);
 
 		const updatedBooks = books.filter((book) => {
 			return book.id !== id;
@@ -40,7 +40,7 @@ function Provider({ children }) {
 	};
 
 	const createBook = async (title) => {
-		const response = await axios.post("http://localhost:3001/books", {
+		const response = await axios.post("http://localhost:3005/books", {
 			title,
 		});
 

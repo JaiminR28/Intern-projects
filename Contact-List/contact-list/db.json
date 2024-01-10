@@ -1,0 +1,54 @@
+{
+	"contacts": [
+		{
+			"id": 1,
+			"first_name": "Sanford",
+			"last_name": "Ralestone",
+			"email": "sralestone0@privacy.gov.au",
+			"contact_no": "+46 824 252 6090"
+		},
+		{
+			"id": 2,
+			"first_name": "Alane",
+			"last_name": "Wythill",
+			"email": "awythill2@si.edu",
+			"contact_no": "+62 510 540 8438"
+		},
+		{
+			"id": 3,
+			"first_name": "Trudi",
+			"last_name": "Navein",
+			"email": "tnavein3@yahoo.co.jp",
+			"contact_no": "+86 610 241 7419"
+		},
+		{
+			"id": 4,
+			"first_name": "Murry",
+			"last_name": "Gres",
+			"email": "mgres4@mail.ru",
+			"contact_no": "+1 770 709 4518"
+		},
+		{
+			"id": 5,
+			"first_name": "Haskell",
+			"last_name": "Strickland",
+			"email": "hstrickland5@gizmodo.com",
+			"contact_no": "+62 431 271 7404",
+			"categories": ["Friends"]
+		},
+		{
+			"id": 6,
+			"first_name": "Jaimin",
+			"last_name": "Rathwa",
+			"email": "jaiminrathwa28@gmail.com",
+			"contact_no": "+91 989 818 0667",
+			"categories": ["Friends"]
+		},
+		{
+			"id": 7,
+			"first_name": "Jaimin",
+			"email": "jaiminrathwa28@gmail.com",
+			"contact_no": "+91 989 818 0667"
+		}
+	]
+}
