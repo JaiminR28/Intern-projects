@@ -5,6 +5,7 @@ const contactsContext = createContext();
 
 function ContactsProvider({ children }) {
 	const [contacts, setContacts] = useState([]);
+	const [filteredData, setFilteredData] = useState(contacts);
 
 	const fetchContacts = async () => {
 		const response = await axios.get("http://localhost:3006/contacts");
@@ -26,6 +27,8 @@ function ContactsProvider({ children }) {
 		contacts,
 		fetchContacts,
 		deleteContact,
+		filteredData,
+		setFilteredData,
 	};
 
 	return (

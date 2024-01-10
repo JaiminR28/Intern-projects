@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"name": "Intern-projects",
+			"path": "../.."
+		},
+		{
+			"name": "location-custom-hook",
+			"path": "../../../Custom Hooks/location-custom-hook"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "Intern-projects"
+	}
+}

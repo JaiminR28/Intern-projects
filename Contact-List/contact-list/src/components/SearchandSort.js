@@ -1,27 +1,25 @@
 import { useContext, useEffect, useState } from "react";
 import contactsContext from "../contexts/contacts";
-
-const CATEGORIES = [
-	"Mobile",
-	"Fax",
-	"Friends",
-	"Relatives",
-	"Business",
-	"Favorites",
-	"others",
-];
+import DropDown from "./DropDown";
 
 function SearchAndSort() {
-	const { contacts } = useContext(contactsContext);
+	const { contacts, setFilteredData } = useContext(contactsContext);
 
-	//TODO: declare this data also globally so that it can be shared with the show component
-
-	const [data, setData] = useState(contacts);
 	const [searchQuery, setSearchQuery] = useState("");
-	const [tags, setTags] = useState([]);
+	const [tags, setTags] = useState("");
+
+	const categories = [
+		{ label: "Mobile", value: "mobile" },
+		{ label: "Fax", value: "fax" },
+		{ label: "Friends", value: "friends" },
+		{ label: "Relatives", value: "relatives" },
+		{ label: "Business", value: "business" },
+		{ label: "Favorites", value: "favorites" },
+		{ label: "Others", value: "others" },
+	];
 
 	const filterContacts = () => {
-		//! we are searching among the parent data that is 'contacts'
+		//~ TO NOTE : we are searching among the parent data that is 'contacts'
 
 		const filtContacts = contacts.filter((contact) => {
 			const fullName =
@@ -29,26 +27,36 @@ function SearchAndSort() {
 			// console.log("fullName", fullName);
 			const isMatch = fullName.includes(searchQuery.toLowerCase());
 
+			// console.log(isMatch);
 			// Seleting Based on Tags
 
-			// if (tags.length > 0)
-			// 	isMatch &&
-			// 		tags.every((tag) => contact.categories?.includes(tag));
+			if (tags) {
+				console.log(tags);
+				console.log(contact.categories);
+				return isMatch && contact.categories?.includes(tags);
+			}
 
 			return isMatch;
 		});
 
 		console.log(filtContacts);
+
 		//! this is the mistake we do not have to set this to data
-		setData(filtContacts);
+		setFilteredData(filtContacts);
 	};
+
+	const handleChange = (option) => {
+		setTags(option);
+	};
+
+	//TODO: Any better way of updating this Data
 
 	useEffect(() => {
 		filterContacts();
-	}, [searchQuery]);
+	}, [searchQuery, tags]);
 
 	useEffect(() => {
-		setData(contacts);
+		setFilteredData(contacts);
 	}, [contacts]);
 
 	return (
@@ -58,6 +66,12 @@ function SearchAndSort() {
 				onChange={(e) => {
 					setSearchQuery(e.target.value);
 				}}
+			/>
+
+			<DropDown
+				tag={tags}
+				categories={categories}
+				onChange={handleChange}
 			/>
 		</div>
 	);
