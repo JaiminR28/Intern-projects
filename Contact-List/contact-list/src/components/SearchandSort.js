@@ -9,6 +9,7 @@ function SearchAndSort() {
 	const [tags, setTags] = useState("");
 
 	const categories = [
+		{ label: "None", value: "none" },
 		{ label: "Mobile", value: "mobile" },
 		{ label: "Fax", value: "fax" },
 		{ label: "Friends", value: "friends" },
@@ -41,12 +42,14 @@ function SearchAndSort() {
 
 		console.log(filtContacts);
 
-		//! this is the mistake we do not have to set this to data
+		//! this is the mistake we do not have to set this to 'Filterdata'
 		setFilteredData(filtContacts);
 	};
 
 	const handleChange = (option) => {
-		setTags(option);
+		console.log(option);
+		if (option === "none") setTags("");
+		else setTags(option);
 	};
 
 	//TODO: Any better way of updating this Data
@@ -60,20 +63,35 @@ function SearchAndSort() {
 	}, [contacts]);
 
 	return (
-		<div>
-			<input
-				type="text"
-				onChange={(e) => {
-					setSearchQuery(e.target.value);
-				}}
-			/>
+		<nav className="level">
+			<div className="level-left">
+				<div className="level-item">
+					<p className="subtitle is-5">
+						<strong>Contact List</strong>
+					</p>
+				</div>
+				<div className="level-item">
+					<div className="field has-addons">
+						<p className="control">
+							<input
+								className="input"
+								type="text"
+								placeholder="Find a Contact"
+								onChange={(e) => setSearchQuery(e.target.value)}
+							/>
+						</p>
+					</div>
+				</div>
+			</div>
 
-			<DropDown
-				tag={tags}
-				categories={categories}
-				onChange={handleChange}
-			/>
-		</div>
+			<div className="level-right">
+				<DropDown
+					onChange={handleChange}
+					categories={categories}
+					text={"Filter"}
+				/>
+			</div>
+		</nav>
 	);
 }
 

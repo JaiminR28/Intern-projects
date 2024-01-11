@@ -13,19 +13,26 @@ function ContactsProvider({ children }) {
 	};
 
 	const deleteContact = async (id) => {
-		const data = await axios.delete(
-			`http://localhost:3006/contacts/:${id}`
-		);
-		console.log(data);
+		await axios.delete(`http://localhost:3006/contacts/${id}`);
+
+		const updatedContacts = contacts.filter((contact) => contact.id !== id);
+		setContacts(updatedContacts);
 	};
 
-	// const createContact = async(id) => {
-	//     const
-	// }
+	const createContact = async (newContact) => {
+		const response = await axios.post("http://localhost:3006/contacts", {
+			...newContact,
+		});
+
+		const updatedContacts = [...contacts, response.data];
+		setContacts(updatedContacts);
+	};
 
 	const valuesToShare = {
 		contacts,
+		setContacts,
 		fetchContacts,
+		createContact,
 		deleteContact,
 		filteredData,
 		setFilteredData,

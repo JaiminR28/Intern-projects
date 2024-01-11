@@ -13,7 +13,6 @@ function AddTask() {
 	const handleChange = (e) => {
 		e.preventDefault();
 		const { name, value } = e.target;
-
 		setInputs({ ...inputs, [name]: value });
 	};
 	const handleSubmit = (e) => {

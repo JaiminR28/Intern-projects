@@ -3,6 +3,7 @@ import "./App.css";
 import contactsContext from "./contexts/contacts";
 import SearchAndSort from "./components/SearchandSort";
 import ShowContacts from "./components/showContacts";
+import AddContact from "./components/AddContact";
 
 function App() {
 	const { contacts, fetchContacts } = useContext(contactsContext);
@@ -13,9 +14,9 @@ function App() {
 
 	return (
 		<div className="App">
-			<h1>Contacts</h1>
 			<SearchAndSort />
 			<ShowContacts />
+			<AddContact />
 		</div>
 	);
 }
