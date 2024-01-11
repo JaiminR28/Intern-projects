@@ -28,6 +28,8 @@ function ContactsProvider({ children }) {
 		setContacts(updatedContacts);
 	};
 
+	const editContact = async (id) => {};
+
 	const valuesToShare = {
 		contacts,
 		setContacts,
