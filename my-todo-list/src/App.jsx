@@ -9,7 +9,7 @@ const router = createBrowserRouter([
 		path: "/",
 		element: (
 			<Navbar>
-				<TodoList />,
+				<TodoList />
 			</Navbar>
 		),
 	},

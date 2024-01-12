@@ -1,10 +1,46 @@
 import { configureStore } from "@reduxjs/toolkit";
 import todoReducer from "./components/addRemoveTask/addRemoveSlice";
+import storage from "redux-persist/lib/storage";
 
-const store = configureStore({
-	reducer: {
-		todos: todoReducer,
-	},
+import {
+	persistStore,
+	persistReducer,
+	FLUSH,
+	REHYDRATE,
+	PAUSE,
+	PERSIST,
+	PURGE,
+	REGISTER,
+} from "redux-persist";
+import { combineReducers } from "redux";
+
+const persistConfig = {
+	key: "root",
+	storage,
+};
+
+const rootReducer = combineReducers({
+	todos: todoReducer,
 });
 
-export default store;
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+const store = configureStore({
+	reducer: persistedReducer,
+	middleware: (getDefaultMiddleware) =>
+		getDefaultMiddleware({
+			serializableCheck: {
+				ignoredActions: [
+					FLUSH,
+					REHYDRATE,
+					PAUSE,
+					PERSIST,
+					PURGE,
+					REGISTER,
+				],
+			},
+		}),
+});
+
+const persistor = persistStore(store);
+export { store, persistor };

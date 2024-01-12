@@ -9,7 +9,7 @@
 	background-color: lightcyan;
 }
 
-.navbar-left {
+.navbarLeft {
 	min-width: 200px;
 }
 
@@ -17,7 +17,7 @@
 	display: inline-block;
 }
 
-.navbar-right {
+.navbarRight {
 	display: flex;
 	justify-content: space-between;
 }

@@ -1,18 +1,18 @@
 import { Link } from "react-router-dom";
-import "./Navbar.css";
+import styles from "./Navbar.module.css";
 
 function Navbar({ children }) {
 	return (
 		<>
-			<nav className="navbar">
-				<div className="navbar-left">
-					<h1 className="logo">Todo List</h1>
+			<nav className={styles.navbar}>
+				<div className={styles.navbarLeft}>
+					<h1 className={styles.logo}>Todo List</h1>
 				</div>
-				<div className="navbar-right">
-					<Link className="link" to={"/"}>
+				<div className={styles.navbarRight}>
+					<Link className={styles.link} to={"/"}>
 						HomePage
 					</Link>
-					<Link className="link" to={"/addTask"}>
+					<Link className={styles.link} to={"/addTask"}>
 						{" "}
 						AddTask{" "}
 					</Link>

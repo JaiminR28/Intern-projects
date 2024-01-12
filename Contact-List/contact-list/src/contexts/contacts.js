@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Navigate, useNavigate } from "react-router-dom";
 
@@ -7,8 +7,6 @@ const contactsContext = createContext();
 function ContactsProvider({ children }) {
 	const [contacts, setContacts] = useState([]);
 	const [filteredData, setFilteredData] = useState(contacts);
-
-	// const navigate = useNavigate();
 
 	const fetchContacts = async () => {
 		const response = await axios.get("http://localhost:3006/contacts");
