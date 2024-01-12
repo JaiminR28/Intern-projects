@@ -1,15 +1,25 @@
-import { useContext, useState } from "react";
-import DropDown from "./DropDown";
+import { useContext, useEffect, useState } from "react";
+import DropDown from "../layouts/DropDown";
 import contactsContext from "../contexts/contacts";
+import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function AddContact() {
-	const { createContact } = useContext(contactsContext);
+	const { createContact, findContactById, editContact } =
+		useContext(contactsContext);
+
+	const navigate = useNavigate();
+
+	let { id } = useParams();
+	id = Number(id);
 
 	const [inputs, setInput] = useState({
+		id: "",
 		first_name: "",
 		last_name: "",
 		email: "",
 		contact_no: "",
+		categories: "",
 	});
 	// let tags = "";
 
@@ -34,22 +44,39 @@ function AddContact() {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
+
 		console.log("Clicked");
 		console.log(inputs);
 
-		// This is temporary
-		// const sendData = {};
-
-		createContact(inputs);
+		if (id) editContact({ ...inputs, id });
+		else createContact(inputs);
 		// setContacts({ ...contacts, inputs });
+
+		return;
 	};
 
 	const handleTags = (tag) => {
 		console.log(tag);
 		const newInput = { ...inputs, categories: tag };
+		console.log(newInput);
 		setInput(newInput);
 		// inputs.categories = tag;
 	};
+
+	useEffect(() => {
+		if (id) {
+			const editContactData = findContactById(id);
+			console.log(editContactData);
+			setInput((prevInput) => ({
+				...prevInput,
+				first_name: editContactData.first_name,
+				last_name: editContactData.last_name,
+				email: editContactData.email,
+				contact_no: editContactData.contact_no,
+				categories: editContactData.categories,
+			}));
+		}
+	}, [id]);
 
 	return (
 		<form onSubmit={handleSubmit}>

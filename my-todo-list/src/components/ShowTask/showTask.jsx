@@ -12,17 +12,20 @@ const TodoList = () => {
 	};
 
 	return (
-		<ul>
-			{todos?.map((todo) => (
-				<li key={todo.id}>
-					<h4>{todo.title}</h4>
-					<p>{todo.time}</p>
-					<button onClick={() => handleRemoveTodo(todo.id)}>
-						Remove
-					</button>
-				</li>
-			))}
-		</ul>
+		<div>
+			<h3>Your todo list</h3>
+			<ul>
+				{todos?.map((todo) => (
+					<li key={todo.id}>
+						<h4>{todo.title}</h4>
+						<p>{todo.time}</p>
+						<button onClick={() => handleRemoveTodo(todo.id)}>
+							Remove
+						</button>
+					</li>
+				))}
+			</ul>
+		</div>
 	);
 };
 

@@ -1,0 +1,33 @@
+.navbar {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: 2rem;
+	width: 100%;
+	height: 4rem;
+
+	background-color: lightcyan;
+}
+
+.navbar-left {
+	min-width: 200px;
+}
+
+.logo {
+	display: inline-block;
+}
+
+.navbar-right {
+	display: flex;
+	justify-content: space-between;
+}
+
+.link {
+	text-decoration: none;
+	color: black;
+	margin-right: 100px;
+}
+
+.link:hover {
+	color: gray;
+}

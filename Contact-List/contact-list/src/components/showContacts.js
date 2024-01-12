@@ -1,9 +1,9 @@
+import { Link } from "react-router-dom";
 import { useContext } from "react";
 import contactsContext from "../contexts/contacts";
 
 function ShowContacts() {
-	const { filteredData, deleteContact, editContact } =
-		useContext(contactsContext);
+	const { filteredData, deleteContact } = useContext(contactsContext);
 
 	const renderedData = filteredData.map((contact) => {
 		return (
@@ -22,10 +22,9 @@ function ShowContacts() {
 					</button>{" "}
 				</td>
 				<td>
-					<button onClick={() => editContact(contact.id)}>
-						{" "}
-						Edit Contact
-					</button>{" "}
+					<Link to={`/edit-contact/${contact.id}`}>
+						<button>Edit Contact</button>
+					</Link>
 				</td>
 			</tr>
 		);

@@ -1,22 +1,41 @@
 import { useContext, useEffect } from "react";
 import "./App.css";
 import contactsContext from "./contexts/contacts";
-import SearchAndSort from "./components/SearchandSort";
-import ShowContacts from "./components/showContacts";
-import AddContact from "./components/AddContact";
+import ContactFormPage from "./Pages/ContactFormPage";
+import {
+	Navigate,
+	RouterProvider,
+	createBrowserRouter,
+} from "react-router-dom";
+import HomePage from "./Pages/HomePage";
+
+const router = createBrowserRouter([
+	{
+		path: "/",
+		element: <HomePage />,
+	},
+	{
+		path: "/add-contact",
+		element: <ContactFormPage />,
+	},
+
+	{
+		path: "/edit-contact/:id",
+		element: <ContactFormPage />,
+	},
+]);
 
 function App() {
-	const { contacts, fetchContacts } = useContext(contactsContext);
+	const { fetchContacts } = useContext(contactsContext);
 
 	useEffect(() => {
 		fetchContacts();
+		<Navigate to={"/"} />;
 	}, []);
 
 	return (
 		<div className="App">
-			<SearchAndSort />
-			<ShowContacts />
-			<AddContact />
+			<RouterProvider router={router} />
 		</div>
 	);
 }

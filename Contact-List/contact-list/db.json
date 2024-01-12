@@ -24,7 +24,7 @@
     {
       "id": 4,
       "first_name": "Murry",
-      "last_name": "Gres",
+      "last_name": "Gresssss",
       "email": "mgres4@mail.ru",
       "contact_no": "+1 770 709 4518"
     },
@@ -50,7 +50,9 @@
       "id": 7,
       "first_name": "Jaimin",
       "email": "jaiminrathwa28@gmail.com",
-      "contact_no": "+91 989 818 0667"
+      "contact_no": "+91 9016353024",
+      "last_name": "Rathva",
+      "categories": "relatives"
     }
   ]
 }

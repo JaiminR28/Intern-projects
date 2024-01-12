@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import contactsContext from "../contexts/contacts";
-import DropDown from "./DropDown";
+import DropDown from "../layouts/DropDown";
 
 function SearchAndSort() {
 	const { contacts, setFilteredData } = useContext(contactsContext);
@@ -32,22 +32,21 @@ function SearchAndSort() {
 			// Seleting Based on Tags
 
 			if (tags) {
-				console.log(tags);
-				console.log(contact.categories);
+				// console.log(tags);
+				// console.log(contact.categories);
 				return isMatch && contact.categories?.includes(tags);
 			}
 
 			return isMatch;
 		});
 
-		console.log(filtContacts);
+		// console.log(filtContacts);
 
 		//! this is the mistake we do not have to set this to 'Filterdata'
 		setFilteredData(filtContacts);
 	};
 
 	const handleChange = (option) => {
-		console.log(option);
 		if (option === "none") setTags("");
 		else setTags(option);
 	};
