@@ -2,11 +2,9 @@
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	margin-top: 2rem;
+	/* margin-top: 1rem; */
 	width: 100%;
 	height: 4rem;
-
-	background-color: lightcyan;
 }
 
 .navbarLeft {
@@ -24,10 +22,12 @@
 
 .link {
 	text-decoration: none;
-	color: black;
+	color: #868e96;
 	margin-right: 100px;
+
+	transition: all ease 100ms;
 }
 
 .link:hover {
-	color: gray;
+	color: #495057;
 }

@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useSelector, useDispatch } from "react-redux";
 import { removeTodo, selectTodos } from "../addRemoveTask/addRemoveSlice";
+import styles from "./showTask.module.css";
 
 const TodoList = () => {
 	const todos = useSelector(selectTodos);
@@ -12,13 +13,14 @@ const TodoList = () => {
 	};
 
 	return (
-		<div>
+		<div className={styles.showtask}>
 			<h3>Your todo list</h3>
-			<ul>
+
+			<ul className={styles.listMenu}>
 				{todos?.map((todo) => (
-					<li key={todo.id}>
+					<li className={styles.listContainer} key={todo.id}>
 						<h4>{todo.title}</h4>
-						<p>{todo.time}</p>
+						<p>{todo.timeDate}</p>
 						<button onClick={() => handleRemoveTodo(todo.id)}>
 							Remove
 						</button>

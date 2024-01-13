@@ -1,20 +1,11 @@
-import { useEffect, useState } from "react";
-
 import "./App.css";
+import Memoization from "./memoization";
 
 function App() {
-	const [count, setCount] = useState(0);
-
-	useEffect(() => {
-		document.body.onclick = () => {
-			console.log(count);
-		};
-	}, []);
 	return (
 		<>
 			<div>
-				{count}
-				<button onClick={() => setCount(count + 1)}>Counter </button>
+				<Memoization />
 			</div>
 		</>
 	);

@@ -1,0 +1,13 @@
+.showtask {
+	margin-top: 2rem;
+}
+
+.listMenu {
+	margin-top: 1rem;
+}
+
+.listContainer {
+	display: flex;
+	justify-content: space-between;
+	padding: 0.8rem 0;
+}

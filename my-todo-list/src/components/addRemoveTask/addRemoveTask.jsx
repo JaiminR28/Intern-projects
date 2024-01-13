@@ -1,45 +1,46 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addTodo } from "./addRemoveSlice";
 import { v4 as uuidv4 } from "uuid";
+import { useForm } from "react-hook-form";
 
 function AddTask() {
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm();
+
 	const dispatch = useDispatch();
 
 	// States
-	const [inputs, setInputs] = useState({});
 
-	const handleChange = (e) => {
-		e.preventDefault();
-		const { name, value } = e.target;
-		setInputs({ ...inputs, [name]: value });
-	};
-	const handleSubmit = (e) => {
-		e.preventDefault();
+	const onSubmit = (data) => {
+		// e.preventDefault();
 
+		console.log(data);
 		dispatch(
 			addTodo({
 				id: uuidv4(),
-				title: inputs.title,
-				time: inputs.timeDate,
+				...data,
 			})
 		);
 	};
 	return (
 		<div>
-			<form name="form" onSubmit={handleSubmit}>
+			<form name="form" onSubmit={handleSubmit(onSubmit)}>
 				<h6>Task Heading:</h6>
-				<input type="text" name="title" onChange={handleChange} />
+				<input type="text" {...register("title", { required: true })} />
 				<h6>Select Date / Time:</h6>
 				<input
 					type="datetime-local"
-					name="timeDate"
-					onChange={handleChange}
+					{...register("timeDate", { required: true })}
 				/>
 				<button type="submit" value="submit">
 					Add Task
 				</button>
+				{/* errors will return when field validation fails  */}
+				{errors.exampleRequired && <span>This field is required</span>}
 			</form>
 		</div>
 	);

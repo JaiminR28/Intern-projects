@@ -17,7 +17,7 @@ const router = createBrowserRouter([
 		path: "/addTask",
 		element: (
 			<Navbar>
-				<AddTask />,
+				<AddTask />
 			</Navbar>
 		),
 	},
