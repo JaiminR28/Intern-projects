@@ -9,7 +9,9 @@ function ContactsProvider({ children }) {
 	const [filteredData, setFilteredData] = useState(contacts);
 
 	const fetchContacts = async () => {
-		const response = await axios.get("http://localhost:3006/contacts");
+		const response = await axios
+			.get("http://localhost:3006/contacts")
+			.catch((err) => console.log(err.message));
 		setContacts(response.data);
 	};
 
