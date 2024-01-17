@@ -2,7 +2,6 @@ import Image from "next/image";
 import styles from "./singlePage.module.css";
 import { Suspense } from "react";
 import PostUser from "@/components/postUser/postUser";
-import { getPost } from "@/lib/data";
 
 const getData = async (slug) => {
 	const res = await fetch(
@@ -13,15 +12,10 @@ const getData = async (slug) => {
 	return res.json();
 };
 
-const SingleFirstPost = async ({ params }) => {
+const FirstPage = async ({ params }) => {
 	const { slug } = params;
-	// FETCH DATA USING API
-	// const post = await getData(slug);
 
-	// FETCH DATA NOT USING API
-	const post = await getPost(slug);
-
-	// console.log(post.userId);
+	const post = await getData(slug);
 
 	return (
 		<div className="flex gap-24">
@@ -37,7 +31,7 @@ const SingleFirstPost = async ({ params }) => {
 			<div className="flex-[2] flex flex-col gap-10	">
 				<h1 className="text-6xl">{post.title}</h1>
 				<div className="flex flex-row gap-4">
-					<Suspense fallback={<div>Loading....</div>}></Suspense>
+					<Suspense fallback={<div>Loading...</div>}></Suspense>
 					<PostUser userId={post.userId} />
 					<div>
 						<div className="flex flex-col gap-2">
@@ -54,4 +48,4 @@ const SingleFirstPost = async ({ params }) => {
 	);
 };
 
-export default SingleFirstPost;
+export default FirstPage;

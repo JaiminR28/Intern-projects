@@ -3,9 +3,7 @@ import styles from "./postUser.module.css";
 import Image from "next/image";
 
 const getData = async (userId) => {
-	const res = await fetch(`https://randomuser.me/api/?id=${userId}`, {
-		cache: "no-store",
-	});
+	const res = await fetch(`https://randomuser.me/api/?id=${userId}`);
 
 	if (!res.ok) throw new Error("Network response was not ok");
 	return res.json();
@@ -13,10 +11,12 @@ const getData = async (userId) => {
 
 const PostUser = async ({ userId }) => {
 	// FETCH DATA WITH AN API
-	const { results } = await getData(userId);
+	// const user = await getData(userId);
 
 	// FETCH DATA WITHOUT AN API
 	// const user = await getUser(userId);
+
+	const { results } = await getData(userId);
 
 	// console.log(results[0].name);
 
