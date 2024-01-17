@@ -31,7 +31,7 @@ function Links() {
 
 	return (
 		<div className={styles.container}>
-			<div className={styles.links}>
+			<div className="hidden md:flex md:items-center gap-2">
 				{links.map((link) => (
 					<NavLink item={link} key={link.title} />
 				))}

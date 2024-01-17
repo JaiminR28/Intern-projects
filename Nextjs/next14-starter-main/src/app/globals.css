@@ -18,6 +18,15 @@
 	@apply w-[500px] h-12 relative grayscale;
 }
 
+.form {
+	@apply flex flex-col gap-5;
+}
+
+.input,
+.textArea {
+	@apply p-5 rounded-md border-none outline-none bg-[var(--bgSoft)] text-[var(--text)];
+}
+
 * {
 	margin: 0;
 	padding: 0;
