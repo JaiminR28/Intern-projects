@@ -11,8 +11,6 @@ function NavigationPageTest() {
 	const query = useSearchParams();
 
 	const q = query.get("q");
-	console.log(pathName);
-	console.log("q", q);
 
 	const handleClick = () => {
 		console.log("clicked");
