@@ -1,4 +1,13 @@
+// import HydrationTest from "@/components/hydration/hydration";
+// import dynamic from "next/dynamic";
 import Image from "next/image";
+
+// const HydrationTestNoSSR = dynamic(
+// 	() => import("@/components/hydration/hydration"),
+// 	{
+// 		ssr: false,
+// 	}
+// );
 
 function Contact() {
 	return (
@@ -9,9 +18,11 @@ function Contact() {
 					src="/contact.png"
 					alt=""
 					fill
+					sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 44vw"
 				/>
 			</div>
 			<div className="flex-[1]">
+				{/*<HydrationTestNoSSR />*/}
 				<form className="form" action="">
 					<input
 						className="input"
