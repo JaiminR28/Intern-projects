@@ -2,6 +2,7 @@ import Image from "next/image";
 import styles from "./singlePage.module.css";
 import { Suspense } from "react";
 import PostUser from "@/components/postUser/postUser";
+import { getPost } from "@/lib/data";
 
 const getData = async (slug) => {
 	const res = await fetch(
@@ -15,7 +16,8 @@ const getData = async (slug) => {
 const FirstPage = async ({ params }) => {
 	const { slug } = params;
 
-	const post = await getData(slug);
+	// const post = await getData(slug);
+	const post = await getPost(slug);
 
 	return (
 		<div className="flex gap-24">
@@ -42,7 +44,7 @@ const FirstPage = async ({ params }) => {
 						</div>
 					</div>
 				</div>
-				<div className="text-xl">{post.body}</div>
+				<div className="text-xl">{post.desc}</div>
 			</div>
 		</div>
 	);
