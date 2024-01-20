@@ -1,5 +1,5 @@
+import LoginForm from "@/components/loginForm/loginForm";
 import { handleGithubLogin, login } from "@/lib/action";
-import Link from "next/link";
 
 const LoginPage = async () => {
 	return (
@@ -10,28 +10,7 @@ const LoginPage = async () => {
 						Login with Github
 					</button>
 				</form>
-				<form
-					className="flex flex-col text-center gap-7"
-					action={login}
-				>
-					<input
-						className="registrationInput"
-						type="text"
-						placeholder="username"
-						name="username"
-					/>
-					<input
-						className="registrationInput"
-						type="password"
-						placeholder="password"
-						name="password"
-					/>
-					<button>Login</button>
-
-					<Link href="/register">
-						{"Don't have an account?"} <b>Register</b>
-					</Link>
-				</form>
+				<LoginForm />
 			</div>
 		</div>
 	);

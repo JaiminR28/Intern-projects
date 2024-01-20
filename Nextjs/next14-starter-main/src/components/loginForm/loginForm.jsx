@@ -1,17 +1,17 @@
 "use client";
 
+import { login } from "@/lib/action";
 import { useFormState } from "react-dom";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { register } from "@/lib/action";
 
-const RegisterForm = () => {
+const LoginForm = () => {
 	const router = useRouter();
-	const [state, formAction] = useFormState(register, undefined);
-	console.log("state :", state);
+	const [state, formAction] = useFormState(login, undefined);
+	// console.log("state: ", state);
 	useEffect(() => {
-		state?.success && router.push("/login");
+		state?.success && router.push("/home");
 	}, [state?.success, router]);
 
 	return (
@@ -24,32 +24,21 @@ const RegisterForm = () => {
 			/>
 			<input
 				className="registrationInput"
-				type="email"
-				placeholder="email"
-				name="email"
-			/>
-			<input
-				className="registrationInput"
 				type="password"
 				placeholder="password"
 				name="password"
 			/>
-			<input
-				className="registrationInput"
-				type="password"
-				placeholder="password again"
-				name="passwordRepeat"
-			/>
-
 			<button className="p-5 cursor-pointer bg-[var(--btn)] text-[var(--textColor)] font-bold border-none rounded-md">
-				Register
+				Login
 			</button>
-			{state?.error}
-			<Link href="/login">
-				Have an account? <b>Login</b>
+
+			<Link href="/register">
+				{"Don't have an account?"} <b>Register</b>
 			</Link>
+
+			{state?.error}
 		</form>
 	);
 };
 
-export default RegisterForm;
+export default LoginForm;

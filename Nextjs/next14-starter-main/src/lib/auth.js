@@ -4,6 +4,7 @@ import { connectToDb } from "./utils";
 import { User } from "./models";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
+import { authConfig } from "./auth.config";
 
 const login = async (credentials) => {
 	try {
@@ -14,15 +15,16 @@ const login = async (credentials) => {
 			throw new Error("Wrong Credentials");
 		}
 
-		// const isPasswordCorrect = bcrypt.compare(
-		// 	user.password,
-		// 	credentials.password
-		// );
+		const isPasswordCorrect = bcrypt.compare(
+			user.password,
+			credentials.password
+		);
 
-		const isPasswordCorrect = user.password === credentials.password;
+		//? THIS IS TEMPORARY ?
+		// const isPasswordCorrect = user.password === credentials.password;
 
 		if (!isPasswordCorrect) {
-			throw new Error("Wrong Credentials");
+			throw new Error("Password do not match ");
 		}
 
 		// console.log("user : ", user);
@@ -57,28 +59,35 @@ export const {
 		}),
 	],
 	callbacks: {
-		async signIn({ user, account, profile }) {
+		async signIn({ account, profile }) {
 			if (account.provider === "github") {
 				connectToDb();
 				try {
 					const user = await User.findOne({ email: profile.email });
 
-					console.log(profile);
+					if (user) return { error: "Username already exists" };
 
-					if (!user) {
-						const newUser = new User({
-							username: profile.name,
-							email: profile.email,
-							password: profile.password,
-							img: profile.avatar_url,
-						});
-						await newUser.save();
-					}
+					// console.log(profile);
+
+					const salt = await bcrypt.genSalt(10);
+					const hashedPassword = await bcrypt.hash(
+						profile.password,
+						salt
+					);
+
+					const newUser = new User({
+						username: profile.name,
+						email: profile.email,
+						password: hashedPassword,
+						img: profile.avatar_url,
+					});
+					await newUser.save();
 				} catch (error) {
 					new alert(error);
 				}
 			}
 			return true;
 		},
+		...authConfig.callbacks,
 	},
 });

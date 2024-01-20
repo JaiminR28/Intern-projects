@@ -69,37 +69,41 @@ export const handleLogout = async () => {
 //~ ADDING A USER
 //~ ///////////////////////
 
-export const register = async (formData) => {
-	const { email, password, username, passwordRepeat } =
+export const register = async (previousState, formData) => {
+	const { email, password, username, passwordRepeat, img } =
 		Object.fromEntries(formData);
 
-	if (password !== passwordRepeat) return "Password do not match !!	";
+	console.log(" img: ", img);
+
+	if (password !== passwordRepeat)
+		return { error: "Password do not match !!" };
 
 	try {
 		connectToDb();
 		const user = await User.findOne({ email });
 
 		if (user) {
-			revalidatePath("/login");
-			return "User already exsists";
+			// revalidatePath("/login");
+			return { error: "User already exsists" };
 		}
 
 		const salt = await bcrypt.genSalt(10);
-		// const hashedPassword = await bcrypt.hash(password, salt);
+		const hashedPassword = await bcrypt.hash(password, salt);
 		// const hashedPassword = await bcrypt.hash(password, salt);
 
 		const newUser = new User({
 			username,
 			email,
-			// password: hashedPassword,
-			password,
+			password: hashedPassword,
+			img,
 		});
 
 		await newUser.save();
 		console.log("saved to db");
+		return { success: true };
 	} catch (error) {
-		console.log(error);
-		return new error("Not able to create a new User !!");
+		// console.log(error);
+		return { error: "Not able to create a new User !!" };
 	}
 };
 
@@ -107,12 +111,11 @@ export const register = async (formData) => {
 //~ LOGGING A USER
 //~ ///////////////////////
 
-export const login = async (formData) => {
+export const login = async (previousState, formData) => {
+	console.log("previousState : ", previousState);
 	const { password, username } = Object.fromEntries(formData);
 	try {
-		const user = await signIn("credentials", { username, password });
-		console.log("user in login : ", user);
-		// redirect("/");
+		await signIn("credentials", { username, password });
 	} catch (err) {
 		console.log(err);
 
