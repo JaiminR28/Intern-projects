@@ -3,7 +3,7 @@ import GithubProvider from "next-auth/providers/github";
 import { connectToDb } from "./utils";
 import { User } from "./models";
 import CredentialsProvider from "next-auth/providers/credentials";
-import bcrypt from "bcrypt";
+import bcryptjs from "bcryptjs";
 import { authConfig } from "./auth.config";
 
 const login = async (credentials) => {
@@ -15,7 +15,7 @@ const login = async (credentials) => {
 			throw new Error("Wrong Credentials");
 		}
 
-		const isPasswordCorrect = bcrypt.compare(
+		const isPasswordCorrect = bcryptjs.compare(
 			user.password,
 			credentials.password
 		);
@@ -60,6 +60,7 @@ export const {
 	],
 	callbacks: {
 		async signIn({ account, profile }) {
+			// console.log("profile : ", profile);
 			if (account.provider === "github") {
 				connectToDb();
 				try {
@@ -69,16 +70,15 @@ export const {
 
 					// console.log(profile);
 
-					const salt = await bcrypt.genSalt(10);
-					const hashedPassword = await bcrypt.hash(
-						profile.password,
-						salt
-					);
+					// const salt = await bcrypt.genSalt(10);
+					// const hashedPassword = await bcrypt.hash(
+					// 	profile.password,
+					// 	salt
+					// );
 
 					const newUser = new User({
 						username: profile.name,
 						email: profile.email,
-						password: hashedPassword,
 						img: profile.avatar_url,
 					});
 					await newUser.save();

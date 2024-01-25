@@ -3,8 +3,7 @@ import { revalidatePath } from "next/cache";
 import { Post, User } from "./models";
 import { connectToDb } from "./utils";
 import { signIn, signOut } from "./auth";
-import bcrypt from "bcrypt";
-import { redirect } from "next/dist/server/api-utils";
+import bcryptjs from "bcryptjs";
 
 //~ ///////////////////////
 //~ ADDING A NEW POST
@@ -87,9 +86,9 @@ export const register = async (previousState, formData) => {
 			return { error: "User already exsists" };
 		}
 
-		const salt = await bcrypt.genSalt(10);
-		const hashedPassword = await bcrypt.hash(password, salt);
-		// const hashedPassword = await bcrypt.hash(password, salt);
+		const salt = await bcryptjs.genSalt(10);
+		const hashedPassword = await bcryptjs.hash(password, salt);
+		// const hashedPassword = await bcryptjs.hash(password, salt);
 
 		const newUser = new User({
 			username,
@@ -112,16 +111,6 @@ export const register = async (previousState, formData) => {
 //~ ///////////////////////
 
 export const login = async (previousState, formData) => {
-	console.log("previousState : ", previousState);
 	const { password, username } = Object.fromEntries(formData);
-	try {
-		await signIn("credentials", { username, password });
-	} catch (err) {
-		console.log(err);
-
-		if (err.message.includes("CredentialsSignin")) {
-			return { error: "Invalid username or password" };
-		}
-		throw err;
-	}
+	await signIn("credentials", { username, password }).then((err) => err);
 };

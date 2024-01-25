@@ -1,6 +1,8 @@
 import PostCard from "@/components/postCard/postCard";
 import styles from "./blog.module.css";
 
+const PORT = process.env.PORT;
+
 const getData = async () => {
 	// 	// const res = await fetch("https://jsonplaceholder.typicode.com/posts");
 
@@ -8,7 +10,7 @@ const getData = async () => {
 	// 	// else return res.json();
 
 	// 	return await fetch("https://jsonplaceholder.typicode.com/posts", {
-	return await fetch("http://localhost:3000/api/blog", {
+	return await fetch(`http://localhost:${PORT}/api/blog`, {
 		next: { revalidate: 3600 },
 	}).then((response) => {
 		if (!response.ok) throw new Error("Could not fetch blog data");

@@ -1,28 +1,38 @@
 const http = require("http");
-const routes = require("./routes");
 const express = require("express");
+const bodyParser = require("body-parser");
+const path = require("path");
 
+const adminData = require("./routes/admin");
+const shopRoutes = require("./routes/shop");
+
+//~ /////////////////////////////
+//~ MIDDLEWARES
+//~ /////////////////////////////
 const app = express();
 
-app.use("/", (req, res, next) => {
-	console.log("This is a middleware");
-	next();
-});
+app.set("view engine", "ejs");
 
-app.use("/add-product", (req, res, next) => {
-	console.log("Into the another middleware");
-	res.send(
-		"<form> <input type='text' name='title' /> <button>Click here</button> </form>"
-	);
-});
+app.use(bodyParser.json());
+app.use(
+	bodyParser.urlencoded({
+		extended: true,
+	})
+);
 
-app.use("/", (req, res, next) => {
-	console.log("Into the last middleware");
-	res.send("<h1>Hello from the Express !!</h1>");
+app.use(express.static(path.join(__dirname, "public")));
+
+app.use("/admin", adminData.routes);
+app.use(shopRoutes);
+app.use((req, res, next) => {
+	res.status(404).sendFile(path.join(__dirname, "views", "404.ejs"));
 });
 
 // console.log("Hello World");
 
+//~ /////////////////////////////
+//~ CREATING SERVER
+//~ /////////////////////////////
 const server = http.createServer(app);
 
 server.listen(3000, () => {

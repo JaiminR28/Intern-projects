@@ -5,8 +5,10 @@ import PostUser from "@/components/postUser/postUser";
 import { getPost } from "@/lib/data";
 import Link from "next/link";
 
+const PORT = process.env.PORT;
+
 const getData = async (slug) => {
-	const res = await fetch(`http://localhost:3000/api/blog/${slug}`);
+	const res = await fetch(`http://localhost:${PORT}/api/blog/${slug}`);
 
 	if (!res.ok) throw new Error("Network response was not ok");
 	return res.json();

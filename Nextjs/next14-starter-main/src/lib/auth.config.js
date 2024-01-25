@@ -13,6 +13,7 @@ export const authConfig = {
 		},
 		async session({ session, token }) {
 			if (token) {
+				// console.log("token : ", token);
 				session.user.id = token.id;
 				session.user.isAdmin = token.isAdmin;
 			}
