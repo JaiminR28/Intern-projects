@@ -1,7 +1,7 @@
 "use client";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
-import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
-import { StarIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { Disclosure, Menu, Transition } from "@headlessui/react";
+import { StarIcon } from "@heroicons/react/24/outline";
 import {
 	ChevronDownIcon,
 	FunnelIcon,
@@ -9,8 +9,6 @@ import {
 	PlusIcon,
 	Squares2X2Icon,
 } from "@heroicons/react/20/solid";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
-import { useDispatch, useSelector } from "react-redux";
 import Image from "next/image";
 import Link from "next/link";
 import { Fragment, useEffect, useState } from "react";
@@ -70,19 +68,21 @@ export default function Home() {
 	const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 	const [filter, setFilter] = useState({});
 	const [sort, setSort] = useState({});
-	const [page, setPage] = useState(1);
+	// const [page, setPage] = useState(1);
 
 	const handleFilter = (e, section, option) => {
 		// filter = {"category": ["smartphone", "laptop"]}
 		// sort = {_sort: "price", _order="desc"}
 		// pagination = {_page: 1, _limit=10}
-		//  TODO: SUPORT FOR MULTIPLE FILTERS TO BE IMPLEMENTED
+		//  TODO: SUPPORT FOR MULTIPLE FILTERS TO BE IMPLEMENTED
 
 		const newFilter = { ...filter };
 		if (e.target.checked) {
 			if (newFilter[section.id]) {
+				// If the filter for that type already exist then push the new option to it
 				newFilter[section.id].push(option.value);
 			} else {
+				// If that type does not exist than add the current type to the Filter object
 				newFilter[section.id] = [option.value];
 			}
 		} else {
@@ -117,7 +117,14 @@ export default function Home() {
 				<main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 					<div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-12">
 						<h1 className="text-4xl font-bold tracking-tight text-gray-900">
-							New Arrivals
+							New Arrivals{" "}
+							<span className="text-[1rem] text-purple-900 ml-6">
+								<strong className="text-[1.2rem]">
+									{" "}
+									{` ${totalItems} `}{" "}
+								</strong>{" "}
+								results were found based on your search{" "}
+							</span>
 						</h1>
 
 						<div className="flex items-center">
@@ -319,9 +326,10 @@ function ProductGrid({ products }) {
 												: "/noavatar.png"
 										}
 										alt={product.title}
-										className="h-full w-full object-cover object-center lg:h-full lg:w-full"
+										className="h-full w-full object-cover aspect-square object-center lg:h-full lg:w-full"
 										width={100}
 										height={300}
+										sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
 									/>
 								</div>
 								<div className="mt-4 flex justify-between">
