@@ -1,17 +1,18 @@
-const http = require("http");
+const path = require("path");
+
 const express = require("express");
 const bodyParser = require("body-parser");
-const path = require("path");
 
 const errorController = require("./controllers/error");
 
 const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
 
+const app = express();
+
 //~ /////////////////////////////
 //~ MIDDLEWARES
 //~ /////////////////////////////
-const app = express();
 
 app.set("view engine", "ejs");
 app.set("views", "views");
@@ -37,8 +38,7 @@ app.use(errorController.get404);
 //~ /////////////////////////////
 //~ CREATING SERVER
 //~ /////////////////////////////
-const server = http.createServer(app);
 
-server.listen(5000, () => {
+app.listen(5000, () => {
 	"server is listeining";
 });
