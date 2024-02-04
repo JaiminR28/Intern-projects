@@ -1,0 +1,22 @@
+{
+	"products": [
+		{
+			"id": "21654132",
+			"title": "A Book",
+			"imageUrl": "https://www.publicdomainpictures.net/pictures/10000/velka/1-1210009435EGmE.jpg",
+			"description": "This is an awesome book!",
+			"price": "19",
+			"quantity": 2
+		},
+		{
+			"title": "Books",
+			"imageUrl": "https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=1798&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+			"description": "Some Books to read Daily",
+			"price": "2000",
+			"id": "0.5928923047006589",
+			"quantity": 2
+		}
+	],
+	"totalCost": 4038,
+	"totalItems": 4
+}
