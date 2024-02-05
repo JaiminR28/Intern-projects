@@ -7,6 +7,7 @@ const errorController = require("./controllers/error");
 
 const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
+const db = require("./util/database");
 
 const app = express();
 
@@ -25,6 +26,8 @@ app.use(
 );
 
 app.use(express.static(path.join(__dirname, "public")));
+
+db.execute("SELECT * FROM products");
 
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);

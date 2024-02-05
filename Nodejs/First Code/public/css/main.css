@@ -23,7 +23,7 @@ form {
 	text-align: center;
 }
 
-.product-img {
+.product_img--details {
 	width: 450px;
 }
 
@@ -167,10 +167,14 @@ form {
 
 .card__image {
 	width: 100%;
+	display: flex;
+	justify-content: center;
 }
 
 .card__image img {
-	width: 100%;
+	width: 12rem;
+	aspect-ratio: 1 / 1;
+	object-fit: contain;
 }
 
 .card__actions {

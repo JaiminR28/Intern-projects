@@ -30,6 +30,18 @@ module.exports = class Product {
 		//~ We will get the product from the getProductsFromFile which we will use in the the function onWards
 
 		getProductsFromFile((products) => {
+			if (this.id) {
+				const exsistingProductId = products.findIndex(
+					(prod) => prod.id === this.id
+				);
+				const updatedProducts = [...products];
+				updatedProducts[exsistingProductId] = this;
+				fs.writeFile(p, JSON.stringify(products), (err) => {
+					console.log(err);
+				});
+			}
+
+			this.id = Math.random().toString();
 			products.push(this);
 			fs.writeFile(p, JSON.stringify(products), (err) => {
 				console.log(err);
