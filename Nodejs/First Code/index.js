@@ -6,6 +6,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 
 const errorController = require("./controllers/error");
+const sequelize = require("./util/database");
 
 const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
@@ -36,10 +37,16 @@ app.use(errorController.get404);
 
 // console.log("Hello World");
 
+sequelize
+	.sync()
+	.then((result) => {
+		// console.log(result);
+		app.listen(5000, () => {
+			"server is listeining";
+		});
+	})
+	.catch((err) => console.error(err));
+
 //~ /////////////////////////////
 //~ CREATING SERVER
 //~ /////////////////////////////
-
-app.listen(5000, () => {
-	"server is listeining";
-});
