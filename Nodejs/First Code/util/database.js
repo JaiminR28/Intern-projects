@@ -1,5 +1,5 @@
 // const mysql = require("mysql2");
-const Sequelize = require("sequelize");
+const { Sequelize } = require("sequelize");
 
 const sequelize = new Sequelize("new_schema", "root", process.env.DATABASE, {
 	dialect: "mysql",

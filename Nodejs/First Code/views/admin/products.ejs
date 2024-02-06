@@ -4,6 +4,7 @@
 
     <body>
         <%- include('../includes/navigation.ejs') %>
+        <%- include('../includes/toast.ejs') %>
 
             <main>
                 <% if (prods.length > 0) { %>
@@ -30,6 +31,7 @@
                                     <a href="/admin/edit-product/<%= product.id %>?edit=true" class="btn">Edit</a>
                                     <a href="/products/<%= product.id %>" class="btn" >Details</a>
                                     <form action="/admin/delete-product" method="POST">
+                                        <input type="hidden" value="<%= product.id %>" name="productId">
                                         <button class="btn" type="submit">Delete</button>
                                     </form>
 

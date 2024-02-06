@@ -15,11 +15,11 @@ function menuToggleClickHandler() {
 backdrop.addEventListener("click", backdropClickHandler);
 menuToggle.addEventListener("click", menuToggleClickHandler);
 
-document.addEventListener("DOMContentLoaded", function () {
-	const toastElement = document.getElementById("toast");
-	if (toastElement) {
-		setTimeout(function () {
-			toastElement.style.opacity = "0";
-		}, 3000);
-	}
-});
+function showToast() {
+	const toast = document.getElementById("toast");
+	toast.style.display = "block";
+
+	setTimeout(() => {
+		toast.style.display = "none";
+	}, 3000); // Hide the toast after 3 seconds
+}

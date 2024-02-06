@@ -29,26 +29,14 @@ product_img--details {
 	width: 450px;
 }
 
-#toast-container {
-	position: fixed;
-	top: 20px;
-	right: 20px;
-	z-index: 9999;
-}
-
-#toast {
-	padding: 10px;
-	border-radius: 5px;
-	color: #fff;
-	font-weight: bold;
+/* Toast */
+.toast {
 	display: none;
-	transition: opacity 0.5s ease-in-out;
-}
-
-#toast.success {
-	background-color: #4caf50;
-}
-
-#toast.error {
-	background-color: #f44336;
+	position: fixed;
+	bottom: 10px;
+	right: 10px;
+	background-color: #333;
+	color: #fff;
+	padding: 15px;
+	border-radius: 5px;
 }
