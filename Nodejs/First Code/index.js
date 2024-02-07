@@ -10,6 +10,12 @@ const sequelize = require("./util/database");
 
 const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
+
+const Product = require("./models/product");
+const User = require("./models/user");
+const Cart = require("./models/cart");
+const CartItem = require("./models/cart-items");
+
 const app = express();
 
 //~ /////////////////////////////
@@ -26,6 +32,16 @@ app.use(
 	})
 );
 
+app.use((req, res, next) => {
+	User.findByPk(1)
+		.then((user) => {
+			// console.log({ user: user.id });
+			req.user = user;
+			next();
+		})
+		.catch((err) => console.log(err));
+});
+
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/admin", adminRoutes);
@@ -37,16 +53,42 @@ app.use(errorController.get404);
 
 // console.log("Hello World");
 
+Product.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
+User.hasMany(Product);
+User.hasOne(Cart);
+Cart.belongsTo(Product);
+Cart.belongsToMany(Product, { through: CartItem });
+
+Product.belongsToMany(Cart, { through: CartItem });
+
+//~ /////////////////////////////
+//~ CALLING SEQUELIZE FOR SYNC
+//~ /////////////////////////////
+
 sequelize
+	// .sync({ force: true })
 	.sync()
 	.then((result) => {
 		// console.log(result);
-		app.listen(5000, () => {
-			"server is listeining";
-		});
+		return User.findByPk(1)
+			.then((user) => {
+				if (!user) {
+					return User.create({
+						name: "Max",
+						email: "Dummy@gmai.com",
+					});
+				}
+				return user;
+			})
+			.then((user) => {
+				//~ /////////////////////////////
+				//~ CREATING SERVER
+				//~ /////////////////////////////
+
+				app.listen(5000, () => {
+					"server is listeining";
+				});
+			})
+			.catch((err) => console.log(err));
 	})
 	.catch((err) => console.error(err));
-
-//~ /////////////////////////////
-//~ CREATING SERVER
-//~ /////////////////////////////
