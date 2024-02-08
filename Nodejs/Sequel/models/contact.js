@@ -7,5 +7,8 @@ module.exports = (sequelize, DataTypes) => {
 		address: {
 			type: DataTypes.STRING,
 		},
+		UserId: DataTypes.INTEGER,
 	});
+
+	return Contacts;
 };

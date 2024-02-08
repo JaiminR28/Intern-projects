@@ -11,6 +11,10 @@ module.exports = (sequelize, DataTypes) => {
 			firstName: {
 				type: DataTypes.STRING,
 				allowNull: false,
+				get() {
+					const rawValue = this.getDataValue("firstName");
+					return rawValue ? rawValue.toUpperCase() : null;
+				},
 			},
 			lastName: {
 				type: DataTypes.STRING,

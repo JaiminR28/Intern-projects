@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 const bodyparser = require("body-parser");
 dotenv.config({ path: ".env" });
 const db = require("./util/database");
-require("./util/database");
+require("./models");
 
 const userController = require("./controller/user.controller");
 
@@ -18,16 +18,16 @@ app.use(bodyparser.urlencoded({ extended: true }));
 
 app.post("/", userController.addUser);
 app.get("/", userController.getUser);
-app.post("/query", userController.queryUser);
+app.post("/create-contact", userController.postContact);
+app.get("/query", userController.queryUser);
+app.get("/findAllUsers", userController.findAllUsers);
+app.get("/get-set-virtual", userController.getSetVirtual);
+app.get("/raw-query", userController.getRawQuery);
+
+app.get("/eager-loading", userController.getEagerLoad);
 
 const PORT = process.env.PORT;
 
-db.sequelize
-	.sync()
-	// .sync({ force: true })
-	.then(() => {
-		app.listen(PORT, () => {
-			// console.log("The server is listening to Port : ", PORT);
-		});
-	})
-	.catch((err) => console.log(err));
+app.listen(PORT, () => {
+	// console.log("The server is listening to Port : ", PORT);
+});
