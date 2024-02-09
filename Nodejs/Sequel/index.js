@@ -25,6 +25,15 @@ app.get("/get-set-virtual", userController.getSetVirtual);
 app.get("/raw-query", userController.getRawQuery);
 
 app.get("/eager-loading", userController.getEagerLoad);
+app.post("/creator", userController.postCreatorUser);
+
+app.get("/m-n-associations", userController.getMNAssociation);
+
+app.get("/bulk-create", userController.bulCreate);
+
+app.get("/get-transact", userController.getTransact);
+
+app.get("/hooks", userController.getHooks);
 
 const PORT = process.env.PORT;
 
