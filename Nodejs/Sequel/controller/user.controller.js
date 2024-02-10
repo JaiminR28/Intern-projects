@@ -1,4 +1,4 @@
-const { QueryTypes } = require("sequelize");
+const { QueryTypes, DataTypes } = require("sequelize");
 const db = require("../models");
 
 const User = db.user;
@@ -313,4 +313,18 @@ exports.getHooks = async (req, res) => {
 	// });
 
 	return handleOutput(res, data);
+};
+
+exports.queryInterfaceUsers = async (req, res) => {
+	const data = [];
+
+	const queryInterface = db.queryInterface.createTable("Person", {
+		name: DataTypes.STRING,
+		isBetaMember: {
+			type: DataTypes.BOOLEAN,
+			defaultValue: false,
+			allowNull: false,
+		},
+	});
+	handleOutput(res, data);
 };

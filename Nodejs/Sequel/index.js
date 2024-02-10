@@ -35,6 +35,8 @@ app.get("/get-transact", userController.getTransact);
 
 app.get("/hooks", userController.getHooks);
 
+app.get("/queryInterfaceUsers", userController.queryInterfaceUsers);
+
 const PORT = process.env.PORT;
 
 app.listen(PORT, () => {

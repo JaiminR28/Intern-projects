@@ -1,4 +1,4 @@
-const { Sequelize, DataTypes } = require("sequelize");
+const { Sequelize, DataTypes, Model } = require("sequelize");
 
 const sequelize = new Sequelize(
 	"employeedb",
@@ -30,6 +30,11 @@ db.profile = require("./profile")(sequelize, DataTypes);
 db.player = require("./player")(sequelize, DataTypes);
 db.team = require("./team")(sequelize, DataTypes);
 db.game = require("./game")(sequelize, DataTypes);
+db.image = require("./image")(sequelize, DataTypes, Model);
+db.video = require("./video")(sequelize, DataTypes, Model);
+db.tag = require("./tag")(sequelize, DataTypes, Model);
+db.tag_Taggable = require("./tag_taggable")(sequelize, DataTypes, Model);
+db.queryInterface = sequelize.getQueryInterface();
 
 const User = db.user;
 const Contacts = db.contact;
@@ -119,6 +124,47 @@ db.PlayerGameTeam.belongsTo(Player);
 db.PlayerGameTeam.belongsTo(db.GameTeam);
 Player.hasMany(db.PlayerGameTeam);
 db.GameTeam.hasMany(db.PlayerGameTeam);
+
+db.image.belongsToMany(db.tag, {
+	through: {
+		model: db.tag_Taggable,
+		unique: false,
+		scope: {
+			taggableType: "image",
+		},
+	},
+	foreignKey: "taggableId",
+	constraints: false,
+});
+
+db.tag.belongsToMany(db.image, {
+	through: {
+		model: db.tag_Taggable,
+		unique: false,
+	},
+	foreignKey: "tagId",
+	constraints: false,
+});
+
+db.video.belongsToMany(db.tag, {
+	through: {
+		model: db.tag_Taggable,
+		unique: false,
+		scope: {
+			taggableType: "video",
+		},
+	},
+	foreignKey: "taggableId",
+	constraints: false,
+});
+db.tag.belongsToMany(db.video, {
+	through: {
+		model: db.tag_Taggable,
+		unique: false,
+	},
+	foreignKey: "tagId",
+	constraints: false,
+});
 
 // db.sequelize.sync({ force: true });
 db.sequelize.sync();
