@@ -6,10 +6,12 @@ const db = require("../models");
 const Expense = db.expenses;
 const Category = db.categories;
 const User = db.User;
+const sequelize = db.sequelize;
 
 const { handleOutput } = require("../utils/outputhandler");
 
-exports.getExpense = async (req, res) => {
+//~ GET ALL THE EXPENSES
+exports.getAllExpense = async (req, res) => {
 	const data = await Expense.findAll({
 		include: [
 			{
@@ -28,24 +30,84 @@ exports.getExpense = async (req, res) => {
 	return handleOutput(res, data, StatusCodes.OK);
 };
 
-exports.addExpense = async (req, res) => {
-	const { amount, description, userId, categoryId } = req.body;
-	console.log(req.body);
-	const data = await Expense.create({
-		id: uuidv4(),
-		amount,
-		description,
-		userId,
-		categoryId,
-	});
+//~ ADD A NEW EXPENSE
 
-	handleOutput(res, data, StatusCodes.CREATED);
+exports.addExpense = async (req, res) => {
+	try {
+		const result = await sequelize.transaction(async (t) => {
+			const { amount, description, userId, categoryId } = req.body;
+			// console.log(req.body);
+			// 1) Adding the expense to the table
+			const newExpense = await Expense.create(
+				{
+					id: uuidv4(),
+					amount,
+					description,
+					userId,
+					categoryId,
+				},
+				{
+					transaction: t,
+				}
+			);
+
+			// 2) Fetching the balance of the user
+
+			const id = newExpense.userId;
+			console.log(id);
+			const userBalance = await User.findByPk(
+				id,
+				{
+					attributes: ["balance"],
+				},
+				{
+					transaction: t,
+				}
+			);
+
+			// 3) Updating the balance
+			const newBalance = userBalance.balance - amount;
+			// console.log(newBalance);
+
+			// 4) Updating the balance in the user balance
+			const data = await User.update(
+				{ balance: newBalance },
+				{
+					where: {
+						id: id,
+					},
+				},
+				{
+					transaction: t,
+				}
+			);
+
+			if (!data) {
+				throw new Error("Could not add the Expense");
+			}
+
+			return handleOutput(res, data, StatusCodes.CREATED);
+		});
+	} catch (error) {
+		if (
+			error.message ===
+			"Cannot read properties of null (reading 'balance')"
+		) {
+			console.error("Transaction was rolled back:", error.message);
+			return handleOutput(
+				res,
+				null,
+				StatusCodes.BAD_REQUEST,
+				"User Not Found !!"
+			);
+		}
+		return handleOutput(res, null, StatusCodes.INTERNAL_SERVER_ERROR);
+	}
 };
 
 //~ GET ALL EXPENSES OF THE USER
 exports.getAllExpenses = async (req, res) => {
 	const id = req.params["id"];
-	console.log({ id });
 	const data = await User.findByPk(id, {
 		attributes: ["id", "username", "balance"],
 		include: [
@@ -68,28 +130,52 @@ exports.getAllExpenses = async (req, res) => {
 };
 
 //~ ADD BALANCE
-
+//? using the unmanaged transaction
 exports.addMoney = async (req, res) => {
 	const id = req.params["id"];
 	const { amount } = req.body;
 
-	const user = await User.findByPk(id, {
-		attributes: ["balance"],
-	});
+	const t = await sequelize.transaction();
 
-	if (user) {
+	try {
+		const user = await User.findByPk(
+			id,
+			{
+				attributes: ["balance"],
+			},
+			{ transaction: t }
+		);
+
+		if (!user) {
+			// If user is not found, rollback the transaction
+			throw new Error("Could not find the user");
+		}
+
 		const newBalance = amount + user.balance;
+		console.log({ newBalance });
 		const data = await User.update(
 			{ balance: newBalance },
 			{
 				where: {
 					id: id,
 				},
+			},
+			{
+				transaction: t,
 			}
 		);
-
+		await t.commit();
 		return handleOutput(res, data, StatusCodes.ACCEPTED);
-	}
+	} catch (error) {
+		await t.rollback();
+		if (error.message === "Could not find the user")
+			return handleOutput(
+				res,
+				null,
+				StatusCodes.NOT_FOUND,
+				error.message
+			);
 
-	return handleOutput(res, null, StatusCodes.ACCEPTED);
+		return handleOutput(res, null, StatusCodes.INTERNAL_SERVER_ERROR);
+	}
 };
