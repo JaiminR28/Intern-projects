@@ -1,18 +1,10 @@
-const { StatusCodes, getReasonPhrase } = require("http-status-codes");
+const { StatusCodes } = require("http-status-codes");
 
 const db = require("../models");
+const { handleOutput } = require("../utils/outputhandler");
 
-const Category = db.category;
-
-const handleOutput = (res, data = null, status) => {
-	if (data) {
-		return res.status(status).json({ data });
-	} else {
-		res.status(StatusCodes.NOT_FOUND).json({
-			error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR),
-		});
-	}
-};
+// console.log(handleOutput);
+const Category = db.categories;
 
 exports.getCategory = async (req, res) => {
 	console.log("called");

@@ -1,18 +1,9 @@
-const { StatusCodes, getReasonPhrase } = require("http-status-codes");
+const { StatusCodes } = require("http-status-codes");
 
 const db = require("../models");
+const { handleOutput } = require("../utils/outputhandler");
 
-const User = db.user;
-
-const handleOutput = (res, data = null, status) => {
-	if (data) {
-		return res.status(status).json({ data });
-	} else {
-		res.status(StatusCodes.NOT_FOUND).json({
-			error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR),
-		});
-	}
-};
+const User = db.User;
 
 exports.getUser = async (req, res) => {
 	const data = await User.findAll({});
@@ -21,7 +12,6 @@ exports.getUser = async (req, res) => {
 };
 
 exports.createUser = async (req, res) => {
-	console.log(req.body);
 	const { username, email } = req.body;
 	await User.create({
 		username: username,
