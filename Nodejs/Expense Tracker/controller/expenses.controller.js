@@ -66,3 +66,30 @@ exports.getAllExpenses = async (req, res) => {
 
 	return handleOutput(res, data, StatusCodes.OK);
 };
+
+//~ ADD BALANCE
+
+exports.addMoney = async (req, res) => {
+	const id = req.params["id"];
+	const { amount } = req.body;
+
+	const user = await User.findByPk(id, {
+		attributes: ["balance"],
+	});
+
+	if (user) {
+		const newBalance = amount + user.balance;
+		const data = await User.update(
+			{ balance: newBalance },
+			{
+				where: {
+					id: id,
+				},
+			}
+		);
+
+		return handleOutput(res, data, StatusCodes.ACCEPTED);
+	}
+
+	return handleOutput(res, null, StatusCodes.ACCEPTED);
+};

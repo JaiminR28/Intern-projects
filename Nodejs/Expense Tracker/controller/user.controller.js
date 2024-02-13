@@ -4,7 +4,6 @@ const db = require("../models");
 const { handleOutput } = require("../utils/outputhandler");
 
 const User = db.User;
-const Expense = db.expenses;
 
 //~ GET ALL USERS
 
@@ -26,5 +25,19 @@ exports.createUser = async (req, res) => {
 		})
 		.catch((err) => {
 			console.log(err);
+			return handleOutput(res, null, StatusCodes.EXPECTATION_FAILED);
 		});
+};
+
+//~ USER WITH ID
+exports.getUserWithId = async (req, res) => {
+	const id = req.params["id"];
+	const data = await User.findByPk(id, {
+		attributes: ["id", "username", "email", "balance"],
+	});
+
+	if (data) {
+		return handleOutput(res, data, StatusCodes.OK);
+	}
+	handleOutput(res, null, StatusCodes.NOT_FOUND);
 };
