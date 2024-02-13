@@ -41,3 +41,28 @@ exports.addExpense = async (req, res) => {
 
 	handleOutput(res, data, StatusCodes.CREATED);
 };
+
+//~ GET ALL EXPENSES OF THE USER
+exports.getAllExpenses = async (req, res) => {
+	const id = req.params["id"];
+	console.log({ id });
+	const data = await User.findByPk(id, {
+		attributes: ["id", "username", "balance"],
+		include: [
+			{
+				model: Expense,
+				attributes: ["amount", "description"],
+				include: [
+					{
+						model: Category,
+						attributes: ["name"],
+						as: "category",
+						required: true,
+					},
+				],
+			},
+		],
+	});
+
+	return handleOutput(res, data, StatusCodes.OK);
+};
