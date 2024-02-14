@@ -1,12 +1,22 @@
 const { StatusCodes } = require("http-status-codes");
+const bcrypt = require("bcryptjs");
 
 const db = require("../models");
 const { handleOutput } = require("../utils/outputhandler");
 
 const User = db.User;
 
-//~ GET ALL USERS
+const generateHashPassword = async (password) => {
+	try {
+		const salt = await bcrypt.genSalt(10);
+		const hashedPassword = await bcrypt.hash(password, salt);
+		return hashedPassword;
+	} catch (error) {
+		throw new Error(error);
+	}
+};
 
+//~ GET ALL USERS
 exports.getUser = async (req, res) => {
 	const data = await User.findAll({});
 
@@ -15,10 +25,12 @@ exports.getUser = async (req, res) => {
 
 //~ CREATE A USER
 exports.createUser = async (req, res) => {
-	const { username, email } = req.body;
+	const { username, email, password } = req.body;
+	const newPassword = await generateHashPassword(password);
 	await User.create({
 		username: username,
 		email: email,
+		password: newPassword,
 	})
 		.then((data) => {
 			return handleOutput(res, data, StatusCodes.CREATED);

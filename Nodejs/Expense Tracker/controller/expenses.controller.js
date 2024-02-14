@@ -31,10 +31,12 @@ exports.getAllExpense = async (req, res) => {
 };
 
 //~ ADD A NEW EXPENSE
-
 exports.addExpense = async (req, res) => {
 	try {
 		const result = await sequelize.transaction(async (t) => {
+			// await t.query("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE");
+			// await t.query("SELECT * FROM your_table FOR UPDATE");
+
 			const { amount, description, userId, categoryId } = req.body;
 			// console.log(req.body);
 			// 1) Adding the expense to the table
@@ -54,7 +56,7 @@ exports.addExpense = async (req, res) => {
 			// 2) Fetching the balance of the user
 
 			const id = newExpense.userId;
-			console.log(id);
+			// console.log(id);
 			const userBalance = await User.findByPk(
 				id,
 				{
