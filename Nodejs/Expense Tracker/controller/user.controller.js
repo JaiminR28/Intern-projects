@@ -23,6 +23,7 @@ exports.getUser = async (req, res) => {
 	handleOutput(res, data, StatusCodes.OK);
 };
 
+//TODO: Create a constraint for unique userName
 //~ CREATE A USER
 exports.createUser = async (req, res) => {
 	const { username, email, password } = req.body;
@@ -39,6 +40,27 @@ exports.createUser = async (req, res) => {
 			console.log(err);
 			return handleOutput(res, null, StatusCodes.EXPECTATION_FAILED);
 		});
+};
+
+//~ VALIDATE USER
+exports.validateUser = async (req, res) => {
+	const { email, password } = req.body;
+
+	const user = await User.findOne({ where: { email: email } });
+
+	if (!user)
+		return handleOutput(
+			res,
+			null,
+			StatusCodes.UNAUTHORIZED,
+			"Could Not Find the User !! Please Sign Up"
+		);
+
+	const isValidPassword = await bcrypt.compare(password, user.password);
+
+	console.log(isValidPassword);
+
+	return handleOutput(res, { userValid: isValidPassword }, StatusCodes.OK);
 };
 
 //~ USER WITH ID
