@@ -1,6 +1,7 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
+	// TODO: change the email to be unique
 	class User extends Model {
 		/**
 		 * Helper method for defining associations.
