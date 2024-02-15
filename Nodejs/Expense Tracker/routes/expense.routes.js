@@ -5,8 +5,20 @@ const router = express.Router();
 
 router
 	.get("/", authMiddleware.sessionChecker, expenseController.getAllExpense)
-	.post("/add-expense", expenseController.addExpense)
-	.get("/get-user-expense/:id", expenseController.getAllExpenses)
-	.post("/add-money/:id", expenseController.addMoney);
+	.post(
+		"/add-expense",
+		authMiddleware.sessionChecker,
+		expenseController.addExpense
+	)
+	.get(
+		"/get-user-expense",
+		authMiddleware.sessionChecker,
+		expenseController.getUserExpenses
+	)
+	.post(
+		"/add-money",
+		authMiddleware.sessionChecker,
+		expenseController.addMoney
+	);
 
 exports.router = router;

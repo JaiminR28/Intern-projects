@@ -6,6 +6,8 @@ const db = require("../models");
 
 const User = db.User;
 
+// const SESSIONS = new Map();
+
 const generateHashPassword = async (password) => {
 	try {
 		const salt = await bcrypt.genSalt(10);
@@ -38,18 +40,22 @@ exports.createAccount = async (req, res) => {
 exports.loginUser = async (req, res) => {
 	try {
 		// 1) If session already present then tell them they are already logged In
-		if (req.session.user && req.cookies.user_Id) {
+		console.log({
+			userSession: req.session.user,
+			cookies: req.cookies.user_Id,
+		});
+
+		if (req.session.user) {
 			return handleOutput(
 				res,
 				null,
-				StatusCodes.CONTINUE,
+				StatusCodes.OK,
 				"You are already Logged In"
 			);
 		}
 
 		// 2) If session expired or not present then login the user
 		const { email, password } = req.body;
-		console.log({ session: req.session });
 		const foundUser = await User.findOne({ where: { email: email } });
 
 		if (!foundUser) {
@@ -61,8 +67,6 @@ exports.loginUser = async (req, res) => {
 			);
 		}
 
-		console.log({ foundUser });
-
 		const isValidPassword = await bcrypt.compare(
 			password,
 			foundUser.password
@@ -73,7 +77,7 @@ exports.loginUser = async (req, res) => {
 			req.session.user = foundUser; // Create new session here
 			return handleOutput(
 				res,
-				{ userValid: isValidPassword },
+				{ userValid: "Logged In Successfully" },
 				StatusCodes.OK
 			);
 		} else {

@@ -108,8 +108,8 @@ exports.addExpense = async (req, res) => {
 };
 
 //~ GET ALL EXPENSES OF THE USER
-exports.getAllExpenses = async (req, res) => {
-	const id = req.params["id"];
+exports.getUserExpenses = async (req, res) => {
+	const id = req.user.id;
 	const data = await User.findByPk(id, {
 		attributes: ["id", "username", "balance"],
 		include: [
@@ -134,19 +134,12 @@ exports.getAllExpenses = async (req, res) => {
 //~ ADD BALANCE
 //? using the unmanaged transaction
 exports.addMoney = async (req, res) => {
-	const id = req.params["id"];
 	const { amount } = req.body;
 
 	const t = await sequelize.transaction();
 
 	try {
-		const user = await User.findByPk(
-			id,
-			{
-				attributes: ["balance"],
-			},
-			{ transaction: t }
-		);
+		const user = req.user;
 
 		if (!user) {
 			// If user is not found, rollback the transaction
@@ -159,7 +152,7 @@ exports.addMoney = async (req, res) => {
 			{ balance: newBalance },
 			{
 				where: {
-					id: id,
+					id: user.id,
 				},
 			},
 			{

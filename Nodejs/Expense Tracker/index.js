@@ -12,6 +12,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.set("view engine", "ejs");
 
 app.use(
 	session({
@@ -30,10 +31,17 @@ app.use(
 // app.use((req, res, next) => {
 // 	console.log({ sesssion: req.session, cookie: req.cookies });
 // 	if (req.session && req.session.user && req.cookies.user_id) {
-// 		console.log({ sessionFromMiddleware: req.session });
+// 		res.render("dashboard", { name: req.session.user.username });
+// 		return next();
 // 	}
-// 	next();
+// 	else {
+
+// 	}
 // });
+
+app.get("/", (req, res) => {
+	res.render("dashboard");
+});
 
 app.use("/user", userRouter.router);
 app.use("/categories", categoryRouter.router);
