@@ -1,6 +1,9 @@
+const path = require("path");
 const express = require("express");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
+const dotenv = require("dotenv");
+dotenv.config({ path: "./config.env" }); // 8626
 
 const userRouter = require("./routes/user.routes");
 const categoryRouter = require("./routes/categories.routes");
@@ -9,10 +12,14 @@ const authRouter = require("./routes/auth.routes");
 
 const app = express();
 
+app.set("view engine", "ejs");
+app.set("views", "views");
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.set("view engine", "ejs");
+
+app.use(express.static(path.join(__dirname, "public")));
 
 app.use(
 	session({
@@ -40,7 +47,10 @@ app.use(
 // });
 
 app.get("/", (req, res) => {
-	res.render("dashboard");
+	res.render("dashboard", {
+		pageTitle: "dashboard",
+		path: "/dashboard",
+	});
 });
 
 app.use("/user", userRouter.router);

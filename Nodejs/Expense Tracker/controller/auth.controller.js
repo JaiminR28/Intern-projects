@@ -18,6 +18,13 @@ const generateHashPassword = async (password) => {
 	}
 };
 
+exports.loginPage = (req, res) => {
+	res.render("login", {
+		pageTitle: "Login Page",
+		path: "/auth/login-page",
+	});
+};
+
 //TODO: Create a constraint for unique userName
 //~ CREATE ACCOUNT
 exports.createAccount = async (req, res) => {

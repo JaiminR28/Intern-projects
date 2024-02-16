@@ -1,10 +1,10 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<title>Login</title>
-	</head>
-	<body>
-		<h2>Login Form</h2>
+<%- include('includes/head.ejs') %>
+</head>
+
+<body>
+    <%- include('includes/navigation.ejs') %>
+	<main>
+        <h2>Login Form</h2>
 		<form action="/login" method="POST">
 			<div>
 				<label for="email">Email:</label>
@@ -18,5 +18,4 @@
 				<input type="submit" value="Login" />
 			</div>
 		</form>
-	</body>
-</html>
+    </main>
