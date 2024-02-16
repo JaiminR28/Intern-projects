@@ -1,16 +1,14 @@
 const path = require("path");
 const express = require("express");
-const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const dotenv = require("dotenv");
+const jwt = require("jsonwebtoken");
 
 if (process.env.NODE_ENV !== "development") {
 	dotenv.config({ path: "./config.env" });
 }
 
-const userRouter = require("./routes/user.routes");
-const categoryRouter = require("./routes/categories.routes");
-const expenseRouter = require("./routes/expense.routes");
+const authRouter = require("./routes/auth.routes");
 
 const app = express();
 
@@ -23,22 +21,22 @@ app.use(cookieParser());
 
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use(
-	session({
-		key: "user_id",
-		secret: "keyboard cat",
-		resave: false,
-		saveUninitialized: true,
-		cookie: { expires: 360000 },
-	})
-);
+// app.use(
+// 	session({
+// 		key: "user_id",
+// 		secret: "keyboard cat",
+// 		resave: false,
+// 		saveUninitialized: true,
+// 		cookie: { expires: 360000 },
+// 	})
+// );
 
 //~ ////////////////////////////////////////////////////
 //~ ROUTES
 //~ ////////////////////////////////////////////////////
 
 // app.use((req, res, next) => {
-// 	console.log({ sesssion: req.session, cookie: req.cookies });
+// 	console.log({ session: req.session, cookie: req.cookies });
 // 	if (req.session && req.session.user && req.cookies.user_id) {
 // 		res.render("dashboard", { name: req.session.user.username });
 // 		return next();
@@ -48,17 +46,8 @@ app.use(
 // 	}
 // });
 
-app.get("/dashboard", (req, res) => {
-	res.render("dashboard", {
-		pageTitle: "dashboard",
-		path: "/dashboard",
-	});
-});
+app.use("/auth", authRouter.router);
 
-app.use("/user", userRouter.router);
-app.use("/categories", categoryRouter.router);
-app.use("/expense", expenseRouter.router);
-
-app.listen(5000, () => {
-	console.log("App is running at port 5000");
+app.listen(4000, () => {
+	console.log("App is running at port 4000");
 });

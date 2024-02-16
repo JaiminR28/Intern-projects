@@ -4,20 +4,20 @@ const authMiddleware = require("../middleware/auth.middleware");
 const router = express.Router();
 
 router
-	.get("/", authMiddleware.sessionChecker, expenseController.getAllExpense)
+	.get("/", authMiddleware.authenticateToken, expenseController.getAllExpense)
 	.post(
 		"/add-expense",
-		authMiddleware.sessionChecker,
+		authMiddleware.authenticateToken,
 		expenseController.addExpense
 	)
 	.get(
 		"/get-user-expense",
-		authMiddleware.sessionChecker,
+		authMiddleware.authenticateToken,
 		expenseController.getUserExpenses
 	)
 	.post(
 		"/add-money",
-		authMiddleware.sessionChecker,
+		authMiddleware.authenticateToken,
 		expenseController.addMoney
 	);
 

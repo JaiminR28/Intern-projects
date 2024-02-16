@@ -4,10 +4,10 @@ const authMiddleware = require("../middleware/auth.middleware");
 const router = express.Router();
 
 router
-	.get("/", authMiddleware.sessionChecker, categoryController.getCategory)
+	.get("/", authMiddleware.authenticateToken, categoryController.getCategory)
 	.post(
 		"/",
-		authMiddleware.sessionChecker,
+		authMiddleware.authenticateToken,
 		categoryController.createCategory
 	);
 

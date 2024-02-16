@@ -1,18 +1,40 @@
 const { StatusCodes } = require("http-status-codes");
 const { handleOutput } = require("../utils/outputhandler");
+const jwt = require("jsonwebtoken");
 
-exports.sessionChecker = (req, res, next) => {
-	// console.log(req);
-	console.log({ session: req.session.user, cookie: req.cookies });
-	if (req.session.user && req.cookies.user_id) {
-		req.user = req.session.user;
-		next();
-	} else {
+// exports.authenticateToken = (req, res, next) => {
+// 	// console.log(req);
+// 	console.log({ session: req.session.user, cookie: req.cookies });
+// 	if (req.session.user && req.cookies.user_id) {
+// 		req.user = req.session.user;
+// 		next();
+// 	} else {
+// 		return handleOutput(
+// 			res,
+// 			null,
+// 			StatusCodes.UNAUTHORIZED,
+// 			"You are not logged In"
+// 		);
+// 	}
+// };
+
+exports.authenticateToken = (req, res, next) => {
+	const authHeader = req.headers["authorization"];
+	const token = authHeader?.split(" ")[1];
+	if (token == null)
 		return handleOutput(
 			res,
 			null,
-			StatusCodes.UNAUTHORIZED,
-			"You are not logged In"
+			StatusCodes.NOT_ACCEPTABLE,
+			"Could not find the Token"
 		);
-	}
+
+	console.log(token);
+
+	jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+		console.log({ user });
+		if (err) return handleOutput(res, null, StatusCodes.UNAUTHORIZED);
+		req.user = user;
+		next();
+	});
 };
