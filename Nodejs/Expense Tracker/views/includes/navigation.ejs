@@ -12,10 +12,21 @@
 			</li>
 			<li class="main-header__item">
 				<a
-					class="<%= path === '/auth/login' ? 'active' : '' %>"
-					href="/auth/login"
-					>Login</a
+					class="<%= path === '/dashboard' ? 'active' : '' %>"
+					href="/expense/get-user-expense"
+					>My Expenses</a
 				>
+			</li>
+
+			<li class="main-header__item">
+				<form action="/auth/logout" method="POST">
+					<button
+						class="<%= path === '/auth/logout' ? 'active' : '' %>"
+						type="submit"
+					>
+						Logout
+					</button>
+				</form>
 			</li>
 		</ul>
 	</nav>

@@ -3,16 +3,19 @@ const expenseController = require("../controller/expenses.controller");
 const authMiddleware = require("../middleware/auth.middleware");
 const router = express.Router();
 
+const expensePage = require("../pages/expense.pages");
+
 router
 	.get("/", authMiddleware.authenticateToken, expenseController.getAllExpense)
+	.get("/add-expense", authMiddleware.isLoggedIn, expensePage.addExpenseForm)
 	.post(
 		"/add-expense",
-		authMiddleware.authenticateToken,
+		authMiddleware.isLoggedIn,
 		expenseController.addExpense
 	)
 	.get(
 		"/get-user-expense",
-		authMiddleware.authenticateToken,
+		// authMiddleware.isLoggedIn,
 		expenseController.getUserExpenses
 	)
 	.post(

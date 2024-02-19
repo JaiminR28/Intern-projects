@@ -1,0 +1,42 @@
+<%- include('includes/head.ejs') %>
+</head>
+
+<body>
+    <%- include('includes/navigation.ejs') %>
+
+<h1>My Table</h1>
+<a href="/expense/add-expense">New Expense</a>
+<% if (!data) { %>
+<span> No Expense Data Available</span>
+<%} else {
+    %> 
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Amount</th>
+                <th>Description</th>
+                <th>Created At</th>
+                <th>Updated At</th>
+                <th>Category ID</th>
+                <th>User ID</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for (const item of data) { %>
+                <tr>
+                    <td><%= item.id %></td>
+                    <td><%= item.amount %></td>
+                    <td><%= item.description %></td>
+                    <td><%= item.createdAt %></td>
+                    <td><%= item.updatedAt %></td>
+                    <td><%= item.categoryId %></td>
+                    <td><%= item.userId %></td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
+    <%
+} %>
+
+<%- include('includes/end.ejs') %>

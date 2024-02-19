@@ -1,6 +1,8 @@
 const { StatusCodes } = require("http-status-codes");
 const { handleOutput } = require("../utils/outputhandler");
 const bcrypt = require("bcryptjs");
+const passport = require("passport");
+const GoogleStrategy = require("passport-google-oauth2").Strategy;
 
 const db = require("../models");
 const jwt = require("jsonwebtoken");
@@ -22,32 +24,101 @@ const generateHashPassword = async (password) => {
 };
 
 function generateAccessToken(user) {
-	return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+	const { id, role } = user;
+	const subject = { id, role };
+	return jwt.sign(subject, process.env.ACCESS_TOKEN_SECRET, {
 		expiresIn: "1min",
 	});
 }
 
 exports.logout = (req, res) => {
-	refreshTokens.filter((token) => token !== req.body.token);
-	return handleOutput(res, { message: "User logged Out !!" }, StatusCodes.OK);
+	// refreshTokens = refreshTokens.filter((token) => token !== req.body.token);\
+	console.log({ session: req.session });
+	console.log({ cookies: req.cookies });
+
+	// req.session.destroy((err) => {
+	// 	if (err) {
+	// 		console.log("Error while destroying session:", err);
+	// 	} else {
+	// 		req.logout(() => {
+	// 			res.clearCookie("user_id");
+	// 			console.log("You are logged out");
+	// 			res.redirect("/");
+	// 		});
+	// 	}
+	// });
+
+	req.session = null;
+	req.logout(() => {
+		res.clearCookie("user_id");
+		console.log("You are logged out");
+		res.redirect("/");
+	});
+
+	// return handleOutput(res, { message: "User logged Out !!" }, StatusCodes.OK);
 };
+
+//~ GOOGLE AUTH
+
+passport.use(
+	new GoogleStrategy(
+		{
+			clientID: process.env.GOOGLE_CLIENT_ID,
+			clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+			callbackURL: "http://localhost:5000/auth/google/callback",
+			passReqToCallback: true,
+		},
+		async function (request, accessToken, refreshToken, profile, done) {
+			// const username, email, balance, createdAt, updatedAt, Password;
+			const username = profile.displayName;
+			const email = profile.email;
+			await User.findOrCreate({
+				where: { email: email },
+				defaults: {
+					username,
+					email,
+				},
+			})
+				.then((user) => {
+					done(null, user);
+				})
+				.catch((err) => {
+					console.log({ err });
+				});
+		}
+	)
+);
+
+passport.serializeUser((user, done) => {
+	done(null, user);
+});
+
+passport.deserializeUser((user, done) => {
+	done(null, user);
+});
 
 //TODO: Create a constraint for unique userName
 //~ CREATE ACCOUNT
-exports.createAccount = async (req, res) => {
-	const { username, email, password } = req.body;
+exports.createAccountFromCredentials = async (req, res) => {
+	const { username, email, password, role } = req.body;
 	const newPassword = await generateHashPassword(password);
 	await User.create({
 		username: username,
 		email: email,
 		password: newPassword,
+		role: role,
 	})
 		.then((data) => {
-			return handleOutput(res, data, StatusCodes.CREATED);
+			res.status(StatusCodes.CREATED).redirect("/");
+			// return handleOutput(res, data, StatusCodes.CREATED);
 		})
-		.catch((err) => {
-			console.log(err);
-			return handleOutput(res, null, StatusCodes.EXPECTATION_FAILED);
+		.catch((error) => {
+			return handleOutput(
+				res,
+				null,
+				StatusCodes.EXPECTATION_FAILED,
+				error.errors[0].message
+			);
 		});
 };
 
@@ -89,7 +160,7 @@ exports.loginUser = async (req, res) => {
 			foundUser.password
 		);
 
-		// console.log(isValidPassword);
+		console.log({ isValidPassword });
 		if (isValidPassword) {
 			const accessToken = generateAccessToken(foundUser.dataValues);
 
@@ -100,10 +171,23 @@ exports.loginUser = async (req, res) => {
 
 			refreshTokens.push(refreshToken);
 
-			return res.json({ accessToken: accessToken, refreshToken });
+			// console.log({ accessToken, refreshToken });
+			res.cookie("access-Token", accessToken, {
+				expires: new Date(Date.now() + 120000),
+				httpOnly: true,
+			});
+			res.cookie("refresh-token", refreshToken, {
+				maxAge: 120000,
+				httpOnly: true,
+			});
+			req.session.user = { id: foundUser.id, role: foundUser.role };
+			res.redirect("/");
+		} else {
+			throw new Error("Wrong Password ");
 		}
 	} catch (error) {
 		console.log({ error });
+		res.redirect("auth/login");
 	}
 };
 

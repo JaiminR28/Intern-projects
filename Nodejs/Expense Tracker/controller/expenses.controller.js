@@ -2,6 +2,7 @@ const { StatusCodes } = require("http-status-codes");
 const { v4: uuidv4 } = require("uuid");
 
 const db = require("../models");
+const expensePage = require("../pages/expense.pages");
 
 const Expense = db.expenses;
 const Category = db.categories;
@@ -37,16 +38,18 @@ exports.addExpense = async (req, res) => {
 			// await t.query("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE");
 			// await t.query("SELECT * FROM your_table FOR UPDATE");
 
-			const { amount, description, userId, categoryId } = req.body;
+			console.log({ body: req.body });
+			console.log(req.user);
+			const { amount, description } = req.body;
 			// console.log(req.body);
 			// 1) Adding the expense to the table
 			const newExpense = await Expense.create(
 				{
 					id: uuidv4(),
-					amount,
+					amount: parseFloat(amount),
 					description,
-					userId,
-					categoryId,
+					userId: req.user.id,
+					categoryId: 1,
 				},
 				{
 					transaction: t,
@@ -88,7 +91,9 @@ exports.addExpense = async (req, res) => {
 				throw new Error("Could not add the Expense");
 			}
 
-			return handleOutput(res, data, StatusCodes.CREATED);
+			res.status(StatusCodes.CREATED).redirect(
+				"/expense/get-user-expense"
+			);
 		});
 	} catch (error) {
 		if (
@@ -96,6 +101,7 @@ exports.addExpense = async (req, res) => {
 			"Cannot read properties of null (reading 'balance')"
 		) {
 			console.error("Transaction was rolled back:", error.message);
+			res.status(StatusCodes.UNAUTHORIZED).redirect("/auth/login");
 			return handleOutput(
 				res,
 				null,
@@ -103,13 +109,16 @@ exports.addExpense = async (req, res) => {
 				"User Not Found !!"
 			);
 		}
-		return handleOutput(res, null, StatusCodes.INTERNAL_SERVER_ERROR);
+		res.status(StatusCodes.INTERNAL_SERVER_ERROR).redirect("/dashboard");
+		// return handleOutput(res, null, StatusCodes.INTERNAL_SERVER_ERROR);
 	}
 };
 
 //~ GET ALL EXPENSES OF THE USER
 exports.getUserExpenses = async (req, res) => {
-	const id = req.user.id;
+	// console.log(req.user);
+	// const id = req.user.id;
+	const id = 28;
 	const data = await User.findByPk(id, {
 		attributes: ["id", "username", "balance"],
 		include: [
@@ -128,7 +137,9 @@ exports.getUserExpenses = async (req, res) => {
 		],
 	});
 
-	return handleOutput(res, data, StatusCodes.OK);
+	// return handleOutput(res, data, StatusCodes.OK);
+	console.log(data.expenses.dataValues);
+	return expensePage.userExpensePage(res, data.expenses);
 };
 
 //~ ADD BALANCE

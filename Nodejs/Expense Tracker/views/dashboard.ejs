@@ -5,7 +5,9 @@
     <%- include('includes/navigation.ejs') %>
 
 
-    <h2>Welcome to the Dashboard</h2>
+    <h2>Welcome to the Dashboard <% if (user) { %>
+<span> valid!!!</span>
+<%} %> </h2>
 
 
 <%- include('includes/end.ejs') %>

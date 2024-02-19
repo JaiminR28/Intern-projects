@@ -1,0 +1,32 @@
+<%- include('includes/head.ejs') %>
+</head>
+
+<body>
+    <%- include('includes/navigation.ejs') %>
+	<main>
+        <h2>Login Form</h2>
+		<form action="/expense/add-expense" method="POST">
+			<div>
+				<label for="amount">amount:</label>
+				<input type="number" id="amount" name="amount" required />
+			</div>
+			<div>
+				<label for="description">description:</label>
+				<input type="text" id="description" name="description" />
+			</div>
+			<div>
+				<label for="dateTime">date and Time:</label>
+				<input type="date" id="dateTime" name="dateTime" required />
+			</div>
+			<div>
+				<input type="submit" value="Add Expense" />
+			</div>
+		</form>
+		<div>
+			<h4>Do not have an account ? </h4>
+			<a href="/auth/signup">Create an account</a>
+		</div>
+    </main>
+
+
+<%- include('includes/end.ejs') %>

@@ -22,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
 			},
 			email: {
 				type: DataTypes.STRING,
+				unique: true,
 				allowNull: false,
 			},
 			balance: {
@@ -31,7 +32,14 @@ module.exports = (sequelize, DataTypes) => {
 			},
 			password: {
 				type: DataTypes.STRING,
+			},
+			role: {
+				type: DataTypes.STRING,
+				validate: {
+					isIn: [["user", "admin"]],
+				},
 				allowNull: false,
+				defaultValue: "user",
 			},
 			createdAt: {
 				allowNull: false,

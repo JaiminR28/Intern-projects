@@ -18,7 +18,19 @@ const jwt = require("jsonwebtoken");
 // 	}
 // };
 
+exports.isLoggedIn = (req, res, next) => {
+	if (req.user || req.session.user) {
+		req.user = req.user ? req.user[0] : req.session.user;
+		next();
+	} else {
+		res.redirect("/auth/login");
+	}
+};
+
 exports.authenticateToken = (req, res, next) => {
+	// console.log({ req: req.cookies.user_id });
+	console.log({ reqToken: req });
+	if (req.cookies.user_id) return next();
 	const authHeader = req.headers["authorization"];
 	const token = authHeader?.split(" ")[1];
 	if (token == null)
@@ -29,10 +41,7 @@ exports.authenticateToken = (req, res, next) => {
 			"Could not find the Token"
 		);
 
-	console.log(token);
-
 	jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-		console.log({ user });
 		if (err) return handleOutput(res, null, StatusCodes.UNAUTHORIZED);
 		req.user = user;
 		next();

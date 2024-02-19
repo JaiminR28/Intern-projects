@@ -5,7 +5,7 @@
 	"main": "index.js",
 	"scripts": {
 		"start": "nodemon index.js",
-		"startAuth" : "nodemon authServer.js"
+		"auth": "nodemon authServer.js"
 	},
 	"author": "Jaimin Rathwa",
 	"license": "ISC",
@@ -21,6 +21,8 @@
 		"http-status-codes": "^2.3.0",
 		"jsonwebtoken": "^9.0.2",
 		"mysql2": "^3.9.1",
+		"passport": "^0.7.0",
+		"passport-google-oauth2": "^0.2.0",
 		"sequelize": "^6.37.0",
 		"uuid": "^9.0.1"
 	}
